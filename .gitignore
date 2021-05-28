@@ -1,3 +1,8 @@
+# DS Store
+.DS_Store
+# Distribution folder
+**/dist
+/dist
 # Logs
 logs
 *.log
