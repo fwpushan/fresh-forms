@@ -28,13 +28,7 @@ import formio from "../../components/generic/formio.vue";
 import ApiClient from "../../services/http/ApiClient";
 export default {
   components: { formio },
-  props: {
-    mode: {
-      type: String,
-      required: true,
-      default: "new",
-    },
-  },
+  props: {},
   setup() {
     const route = useRoute();
     const toast = useToast();
@@ -49,13 +43,24 @@ export default {
     const submitted = async (args: any, form: any) => {
       // Call api
       try {
-        await ApiClient.DynamicForms.submitForm(formName as string, {
-          data: args,
-        });
+        if (id !== "none") {
+          await ApiClient.DynamicForms.updateSubmission(
+            id as string,
+            formName as string,
+            {
+              data: args,
+            },
+          );
+        } else {
+          await ApiClient.DynamicForms.submitForm(formName as string, {
+            data: args,
+          });
+        }
         toast.add({
           severity: "success",
-          summary: `Successfully submitted!`,
-          detail: " Successfully!",
+          summary:
+            id !== "none" ? `Successfully submitted!` : `Update successfully`,
+          detail: "Saved Successfully!",
           life: 5000,
         });
         args.submit = false;

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { IUserToken, UserToken } from 'src/modules/auth';
 import { FormService, SubmissionDto } from 'src/modules/forms';
 import { SubmissionResponseDto } from 'src/modules/forms/models/submission.res.dto';
@@ -23,6 +23,21 @@ export class FormsController {
     @UserToken() info: IUserToken,
   ) {
     return this.formService.submitForm(formName, body.data, info.sub);
+  }
+
+  @Patch(':formName/submission/:id')
+  async updateSubmission(
+    @Param('formName') formName: string,
+    @Param('id') id: string,
+    @Body() body: SubmissionDto,
+    @UserToken() info: IUserToken,
+  ) {
+    return this.formService.editFormSubmission(
+      id,
+      formName,
+      body.data,
+      info.sub,
+    );
   }
 }
 

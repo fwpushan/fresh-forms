@@ -1,4 +1,8 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpStatus,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import {
   FormsConfig,
   DryRunSubmissionResult,
@@ -107,10 +111,39 @@ export class FormService {
     return submission.id;
   }
 
+  async editFormSubmission(
+    id: string,
+    formName: string,
+    data: any,
+    userId: string,
+  ): Promise<string> {
+    // 1. Validate
+    await this.dryRunSubmission(formName, data);
+    // 2. Get user
+    const user = await this.userRepo.findOneOrFail({
+      userId,
+    });
+    // 3. Submission
+    const submission = await this.submissionRepo.findOneOrFail(id);
+    if (submission.data.formName !== formName) {
+      throw new UnprocessableEntityException(
+        `Form name mismatch ${formName} requested and existing ${submission.data.formName}`,
+      );
+    }
+    submission.data = {
+      formData: data,
+      formName,
+      info: {
+        previous: submission.data.formData,
+      },
+    };
+    submission.modifier = user;
+    await this.submissionRepo.save(submission);
+    return submission.id;
+  }
+
   async getAllSubmission(): Promise<SubmissionResponseDto[]> {
-    this.logger.debug('x');
     const results: Submission[] = await this.submissionRepo.find();
-    this.logger.debug(results);
     const returnValues: SubmissionResponseDto[] = results.map((submission) => ({
       id: submission.id,
       data: submission.data.formData,

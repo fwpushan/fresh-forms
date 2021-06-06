@@ -38,6 +38,19 @@ export class DynamicFormsApi extends HttpBaseClient {
     }
   }
 
+  async updateSubmission(id: string, formName: string, data: any) {
+    try {
+      return await this.apiClient.patch(
+        `${pathName}/${formName}/submission/${id}`,
+        data,
+        this.addAuthHeader(),
+      );
+    } catch (error) {
+      this.handleRequestError(error);
+      throw error;
+    }
+  }
+
   async submissions(): Promise<FormSubmissionContract[]> {
     try {
       const response: FormSubmissionContract[] = (
