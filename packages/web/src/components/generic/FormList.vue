@@ -34,6 +34,7 @@ import { onMounted, reactive, ref, onBeforeUpdate } from "vue";
 import OrderList from "primevue/orderlist";
 import ApiClient from "../../services/http/ApiClient";
 import { useRouter, useRoute } from "vue-router";
+import { UserRoutesConst } from "../../constants/routes/RouteConstants";
 
 interface FormDef {
   title: string;
@@ -65,9 +66,10 @@ export default {
         },
       });*/
       router.push({
-        name: "formContainer",
+        name: UserRoutesConst.FORM_CONTAINER,
         params: {
           formName: data.path,
+          id: "none",
         },
       });
     };

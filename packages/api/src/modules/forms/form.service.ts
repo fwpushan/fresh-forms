@@ -117,8 +117,21 @@ export class FormService {
       userName: submission.user.name,
       createdAt: submission.createdAt,
       updateAt: submission.updatedAt,
+      formName: submission.data.formName,
     }));
     return returnValues;
+  }
+
+  async submissionData(id: string): Promise<SubmissionResponseDto> {
+    const submission = await this.submissionRepo.findOne(id);
+    return {
+      id: submission.id,
+      data: submission.data.formData,
+      userName: submission.user.name,
+      createdAt: submission.createdAt,
+      updateAt: submission.updatedAt,
+      formName: submission.data.formName,
+    };
   }
 
   /**

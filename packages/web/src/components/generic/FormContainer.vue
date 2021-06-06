@@ -1,12 +1,19 @@
 <template>
   <v-container>
     <Card class="p-m-4">
-      <template #title> {{ title }} </template>
+      <template #title>
+        <h5>{{ title }}</h5>
+        <Message severity="info" v-if="id !== 'none'">
+          Edit the submission ({{ id }})
+        </Message>
+      </template>
       <template #content>
         <formio
           :formName="formName"
           @submitted="submitted"
           @loaded="onLoaded"
+          :data="data"
+          :id="id"
         ></formio>
       </template>
     </Card>
@@ -21,11 +28,19 @@ import formio from "../../components/generic/formio.vue";
 import ApiClient from "../../services/http/ApiClient";
 export default {
   components: { formio },
+  props: {
+    mode: {
+      type: String,
+      required: true,
+      default: "new",
+    },
+  },
   setup() {
     const route = useRoute();
     const toast = useToast();
     const query = route.params;
     const formName = query.formName || "unknown";
+    const id = query.id || "none";
     const title = ref(`Form ${formName} is loading ....`);
 
     const onLoaded = () => {
@@ -65,6 +80,7 @@ export default {
       formName,
       submitted,
       onLoaded,
+      id,
     };
   },
 };

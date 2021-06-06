@@ -21,20 +21,20 @@ export default {
     const router = useRouter();
     const items = ref<MenuModel[]>([
       {
-        label: "Dashboard",
-        icon: "pi pi-home",
-        command: () => {
-          router.push({
-            name: UserRoutesConst.APP_DASHBOARD,
-          });
-        },
-      },
-      {
         label: "Forms",
         icon: "pi pi-file",
         command: () => {
           router.push({
-            name: "formsList",
+            name: UserRoutesConst.FORM_LIST,
+          });
+        },
+      },
+      {
+        label: "Submission",
+        icon: "pi pi-clone",
+        command: () => {
+          router.push({
+            name: UserRoutesConst.FORM_SUBMISSION,
           });
         },
       },

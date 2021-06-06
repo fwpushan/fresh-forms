@@ -1,7 +1,9 @@
 export enum AppRoutes {
   UserRoot = "/user",
-  UserDashboard = "institution-dashboard",
+  FormSubmissions = "forms-submissions",
   Login = "login",
   ForbiddenUser = "/forbidden-user",
   InstitutionManageUsers = "manage-users",
+  forms = "forms",
+  formContainer = "load/:formName/:id",
 }

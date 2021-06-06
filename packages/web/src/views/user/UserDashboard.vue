@@ -1,11 +1,20 @@
 <template>
   <v-container>
-    <h1 class="d-flex justify-content-center">Dashboard Work in Progress</h1>
+    <div class="left-dashboard">
+      <UserSubmissionTable />
+    </div>
   </v-container>
 </template>
 
 <script lang="ts">
-export default {};
+import UserSubmissionTable from "../../components/layouts/SubmissionTable.vue";
+export default {
+  components: { UserSubmissionTable },
+};
 </script>
 
-<style></style>
+<style lang="scss">
+.left-dashboard {
+  margin-left: 75px;
+}
+</style>

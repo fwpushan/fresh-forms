@@ -15,7 +15,6 @@ export default async function(
     realm: config.authConfig.realm,
     clientId: config.authConfig.clientIds[type],
   });
-  let isForbiddenUser = false;
 
   try {
     await keycloak.init({
@@ -33,8 +32,5 @@ export default async function(
   keycloak.onTokenExpired = () => {
     store.dispatch("auth/logout");
   };
-  if (isForbiddenUser) {
-    throw new Error("Forbidden user");
-  }
   return keycloak;
 }

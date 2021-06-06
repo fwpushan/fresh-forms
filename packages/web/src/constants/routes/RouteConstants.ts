@@ -1,8 +1,10 @@
 export const UserRoutesConst = {
   //Institution
   APP_USER: Symbol(),
-  APP_DASHBOARD: Symbol(),
+  FORM_SUBMISSION: Symbol(),
   LOGIN: Symbol(),
+  FORM_LIST: Symbol(),
+  FORM_CONTAINER: Symbol(),
 };
 
 export const SharedRouteConst = {

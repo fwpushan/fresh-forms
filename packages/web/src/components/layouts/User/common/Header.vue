@@ -10,7 +10,7 @@
           style="color: white"
           @click="
             $router.push({
-              name: UserRoutesConst.APP_DASHBOARD,
+              name: UserRoutesConst.FORM_LIST,
             })
           "
         />

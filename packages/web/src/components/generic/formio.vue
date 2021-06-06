@@ -1,6 +1,8 @@
 <template>
-  <ProgressSpinner v-if="!hideSpinner" />
-  <div ref="formioContainerRef"></div>
+  <div>
+    <ProgressSpinner v-if="!hideSpinner" />
+    <div ref="formioContainerRef"></div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -18,6 +20,9 @@ export default {
     },
     data: {
       type: Object,
+    },
+    id: {
+      type: String,
     },
   },
   setup(props: any, context: SetupContext) {
@@ -41,6 +46,15 @@ export default {
         form.submission = {
           data: props.data,
         };
+      } else {
+        if (props.id && props.id !== "none") {
+          const subMissionData = await ApiClient.DynamicForms.submission(
+            props.id,
+          );
+          form.submission = {
+            data: subMissionData.data,
+          };
+        }
       }
 
       context.emit("loaded", form);

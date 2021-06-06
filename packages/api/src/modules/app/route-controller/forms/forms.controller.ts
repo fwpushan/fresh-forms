@@ -31,7 +31,11 @@ export class FormSubmissionController {
   constructor(private readonly formService: FormService) {}
   @Get()
   async allSubmissions(): Promise<SubmissionResponseDto[]> {
-    console.log('HELLO');
     return this.formService.getAllSubmission();
+  }
+
+  @Get(':id')
+  async submission(@Param('id') id: string): Promise<any> {
+    return this.formService.submissionData(id);
   }
 }

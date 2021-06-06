@@ -27,35 +27,34 @@ export const UserRoutes: Array<RouteRecordRaw> = [
       },
       {
         path: "",
-        redirect: `${AppRoutes.UserRoot}/${AppRoutes.UserDashboard}`,
-        name: UserRoutesConst.APP_DASHBOARD,
+        redirect: `${AppRoutes.UserRoot}/${AppRoutes.forms}`,
+        name: UserRoutesConst.FORM_LIST,
         component: User,
         children: [
           {
-            path: AppRoutes.UserDashboard,
-            name: UserRoutesConst.APP_DASHBOARD,
+            path: AppRoutes.FormSubmissions,
+            name: UserRoutesConst.FORM_SUBMISSION,
             components: {
               default: UserDashboard,
               sidebar: HomeSideBar,
             },
           },
           {
-            path: "forms",
-            name: "formsList",
+            path: AppRoutes.forms,
+            name: UserRoutesConst.FORM_LIST,
             components: {
               default: FormList,
               sidebar: HomeSideBar,
             },
-            children: [
-              {
-                path: "load/:formName",
-                name: "formContainer",
-                components: {
-                  default: FormContainer,
-                  sidebar: HomeSideBar,
-                },
-              },
-            ],
+            children: [],
+          },
+          {
+            path: AppRoutes.formContainer,
+            name: UserRoutesConst.FORM_CONTAINER,
+            components: {
+              default: FormContainer,
+              sidebar: HomeSideBar,
+            },
           },
         ],
       },
@@ -85,7 +84,7 @@ export const UserRoutes: Array<RouteRecordRaw> = [
               AppConfigService.shared.checkUser().then(result => {
                 if (result) {
                   next({
-                    name: UserRoutesConst.APP_DASHBOARD,
+                    name: UserRoutesConst.FORM_LIST,
                   });
                 }
               });
