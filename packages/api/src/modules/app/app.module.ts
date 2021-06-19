@@ -13,6 +13,7 @@ import {
   FormSubmissionController,
 } from './route-controller/forms/forms.controller';
 import { FormsModule } from '../forms';
+import { RuleEngineModule } from '../rule-engine';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { FormsModule } from '../forms';
     AuthModule,
     UserModule,
     FormsModule,
+    RuleEngineModule,
   ],
   controllers: [
     AppController,

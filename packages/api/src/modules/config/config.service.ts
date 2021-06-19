@@ -24,7 +24,9 @@ export class ConfigService {
         },
       },
       workflow: {
-        ruleEngineUrl: process.env.RULE_ENGINE_URL,
+        ruleEngineUrl: process.env.BPM_URL,
+        bpmClientId: process.env.KEYCLOAK_BPM_CLIENT_ID,
+        bpmClientSecret: process.env.KEYCLOAK_BPM_CLIENT_SECRET,
         serviceAccountCredential: {
           userName: process.env.WORKFLOW_SA_USER_NAME,
           password: process.env.WORKFLOW_SA_PASSWORD,

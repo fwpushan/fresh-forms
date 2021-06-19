@@ -7,6 +7,7 @@ import { LoggerService } from 'src/modules/logger';
 import { exit } from 'process';
 import { KeycloakConfig } from './modules/auth/keycloakConfig';
 import { AppAllExceptionsFilter } from './exception.filter';
+import { bootstrapCamundaSub } from './camunda-subscriber';
 
 async function bootstrap() {
   await KeycloakConfig.load();
@@ -46,5 +47,6 @@ async function bootstrap() {
   await app.listen(port);
 
   LoggerService.log(`Application is listing on port ${port}`, 'Bootstrap');
+  bootstrapCamundaSub();
 }
 bootstrap();

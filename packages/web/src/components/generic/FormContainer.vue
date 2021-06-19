@@ -34,7 +34,7 @@ export default {
     const toast = useToast();
     const query = route.params;
     const formName = query.formName || "unknown";
-    const id = query.id || "none";
+    const id = ref(query.id || "none");
     const title = ref(`Form ${formName} is loading ....`);
 
     const onLoaded = () => {
@@ -43,23 +43,29 @@ export default {
     const submitted = async (args: any, form: any) => {
       // Call api
       try {
-        if (id !== "none") {
+        if (id.value !== "none") {
           await ApiClient.DynamicForms.updateSubmission(
-            id as string,
+            id.value as string,
             formName as string,
             {
               data: args,
             },
           );
         } else {
-          await ApiClient.DynamicForms.submitForm(formName as string, {
-            data: args,
-          });
+          const resp = await ApiClient.DynamicForms.submitForm(
+            formName as string,
+            {
+              data: args,
+            },
+          );
+          id.value = resp.data;
         }
         toast.add({
           severity: "success",
           summary:
-            id !== "none" ? `Successfully submitted!` : `Update successfully`,
+            id.value !== "none"
+              ? `Successfully submitted!`
+              : `Update successfully`,
           detail: "Saved Successfully!",
           life: 5000,
         });

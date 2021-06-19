@@ -15,6 +15,7 @@ import { Repository } from 'typeorm';
 import { Submission, User } from '../database';
 import { SubmissionResponseDto } from './models/submission.res.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { RuleEngineService } from '../rule-engine';
 
 // Expected header name to send the authorization token to formio API.
 const FORMIO_TOKEN_NAME = 'x-jwt-token';
@@ -23,6 +24,7 @@ const FORMIO_TOKEN_NAME = 'x-jwt-token';
 export class FormService {
   constructor(
     private readonly configService: ConfigService,
+    private readonly ruleEngine: RuleEngineService,
     private readonly logger: LoggerService,
     @InjectRepository(Submission)
     private readonly submissionRepo: Repository<Submission>,
@@ -88,6 +90,32 @@ export class FormService {
     }
   }
 
+  async runWorkflow(formName: string, submissionId: string, data: any) {
+    // 3. Now check associated workflow
+    const formDef: any = await this.fetch(formName);
+    if (formDef._id) {
+      // 3a. Get form association
+      const result: any[] = await this.submissionRepo.query(
+        'SELECT * from form_process_mapper WHERE form_id=$1',
+        [formDef._id],
+      );
+      if (result && result.length > 0) {
+        const processKey = result[0].process_key;
+        try {
+          await this.ruleEngine.start(processKey, {
+            submissionId,
+            ...data,
+          });
+        } catch (error) {
+          this.logger.error(
+            `Unable to start workflow: For error: ${error}`,
+            'FormService',
+          );
+        }
+      }
+    }
+  }
+
   async submitForm(
     formName: string,
     data: any,
@@ -108,6 +136,7 @@ export class FormService {
       info: {},
     };
     await this.submissionRepo.save(submission);
+    await this.runWorkflow(formName, submission.id, {});
     return submission.id;
   }
 

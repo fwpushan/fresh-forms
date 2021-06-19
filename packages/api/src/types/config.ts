@@ -63,7 +63,8 @@ export interface ClientCredential {
 
 export interface WorkflowConfig {
   ruleEngineUrl: string;
-
+  bpmClientId: string;
+  bpmClientSecret: string;
   serviceAccountCredential: UserPasswordCredential;
 }
 
