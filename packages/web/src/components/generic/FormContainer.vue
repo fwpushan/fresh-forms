@@ -14,6 +14,7 @@
           @loaded="onLoaded"
           :data="data"
           :id="id"
+          :additionalDataURL="dataURL"
         ></formio>
       </template>
     </Card>
@@ -28,7 +29,11 @@ import formio from "../../components/generic/formio.vue";
 import ApiClient from "../../services/http/ApiClient";
 export default {
   components: { formio },
-  props: {},
+  props: {
+    data: {
+      type: Object,
+    },
+  },
   setup() {
     const route = useRoute();
     const toast = useToast();
@@ -36,6 +41,7 @@ export default {
     const formName = query.formName || "unknown";
     const id = ref(query.id || "none");
     const title = ref(`Form ${formName} is loading ....`);
+    const dataURL = ref((query.dataURL as string) || "");
 
     const onLoaded = () => {
       title.value = `${formName}`;
@@ -92,6 +98,7 @@ export default {
       submitted,
       onLoaded,
       id,
+      dataURL,
     };
   },
 };

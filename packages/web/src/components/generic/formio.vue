@@ -24,6 +24,9 @@ export default {
     id: {
       type: String,
     },
+    additionalDataURL: {
+      type: String,
+    },
   },
   setup(props: any, context: SetupContext) {
     const formioContainerRef = ref(null);
@@ -42,9 +45,22 @@ export default {
 
       form.nosubmit = true;
       hideSpinner.value = true;
+      let additionalData = {};
+      if (props.additionalDataURL || form.submission?.data?.additionalDataURL) {
+        const dataURL =
+          props.additionalDataURL || form.submission?.data?.additionalDataURL;
+        additionalData = (
+          await ApiClient.DynamicForms.getFormAdditionalData(dataURL)
+        ).data;
+
+        console.dir({
+          url: props.additionalDataURL,
+          data: additionalData,
+        });
+      }
       if (props.data) {
         form.submission = {
-          data: props.data,
+          data: { ...props.data, ...additionalData },
         };
       } else {
         if (props.id && props.id !== "none") {
@@ -52,7 +68,11 @@ export default {
             props.id,
           );
           form.submission = {
-            data: subMissionData.data,
+            data: { ...subMissionData.data, ...additionalData },
+          };
+        } else {
+          form.submission = {
+            data: additionalData,
           };
         }
       }

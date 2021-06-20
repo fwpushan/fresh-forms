@@ -231,6 +231,17 @@ export class FormService {
     }
   }
 
+  async getAllLakes() {
+    const allLakeSubmission: Submission[] = await this.submissionRepo
+      .createQueryBuilder('submissions')
+      .where(`submissions.data->>'formName' = :formName`, {
+        formName: 'lakeform',
+      })
+      .getMany();
+
+    return allLakeSubmission.map((item) => item.data.formData);
+  }
+
   /**
    * Creates the expected authorization header to authorize the formio API.
    * @returns header to be added to HTTP request.

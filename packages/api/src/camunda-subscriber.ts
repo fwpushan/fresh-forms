@@ -23,7 +23,7 @@ export function bootstrapCamundaSub() {
   client.subscribe('processUserInput', async ({ task, taskService }) => {
     LoggerService.log(`Camunda processUserInput`, 'Camunda-sub');
     const variables = new Variables();
-    variables.set('isRecrsive', 'true');
+    variables.set('isRecursive', 'true');
     await taskService.complete(task, variables);
   });
   client.subscribe('makeRecursive', async ({ task, taskService }) => {

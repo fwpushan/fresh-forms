@@ -49,7 +49,6 @@ export default {
 
     // UI events
     const onViewEdit = (data: FormSubmissionContract) => {
-      console.log(`On VIEW/EDIT: ${JSON.stringify(data, null, 2)}`);
       router.push({
         name: UserRoutesConst.FORM_CONTAINER,
         params: {

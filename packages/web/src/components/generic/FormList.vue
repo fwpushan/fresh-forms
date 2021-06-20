@@ -70,6 +70,7 @@ export default {
         params: {
           formName: data.path,
           id: "none",
+          dataURL: "",
         },
       });
     };
