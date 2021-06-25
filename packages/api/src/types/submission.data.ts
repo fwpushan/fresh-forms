@@ -3,3 +3,9 @@ export interface SubmissionData {
   formName: string;
   info: any;
 }
+
+export interface DuckFeedSubmissionInfo {
+  food: string;
+  feedTime: any;
+  lake: string;
+}

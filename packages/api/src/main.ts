@@ -11,7 +11,8 @@ import { bootstrapCamundaSub } from './camunda-subscriber';
 
 async function bootstrap() {
   await KeycloakConfig.load();
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app: NestExpressApplication =
+    await NestFactory.create<NestExpressApplication>(AppModule);
   // Setting global prefix
   app.setGlobalPrefix('api');
   // CORS
@@ -47,6 +48,6 @@ async function bootstrap() {
   await app.listen(port);
 
   LoggerService.log(`Application is listing on port ${port}`, 'Bootstrap');
-  bootstrapCamundaSub();
+  bootstrapCamundaSub(app);
 }
 bootstrap();

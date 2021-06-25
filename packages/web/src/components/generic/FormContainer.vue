@@ -23,10 +23,11 @@
 
 <script lang="ts">
 import { ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import formio from "../../components/generic/formio.vue";
 import ApiClient from "../../services/http/ApiClient";
+import { UserRoutesConst } from "../../constants/routes/RouteConstants";
 export default {
   components: { formio },
   props: {
@@ -36,6 +37,7 @@ export default {
   },
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const toast = useToast();
     const query = route.params;
     const formName = query.formName || "unknown";
@@ -79,6 +81,16 @@ export default {
         form.submission = {
           data: args,
         };
+        if (id.value !== "none") {
+          router.push({
+            name: UserRoutesConst.FORM_CONTAINER,
+            params: {
+              formName: formName,
+              id: id.value,
+              dataURL: dataURL.value,
+            },
+          });
+        }
       } catch (error) {
         toast.add({
           severity: "error",

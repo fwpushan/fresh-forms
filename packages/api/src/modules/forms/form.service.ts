@@ -102,6 +102,7 @@ export class FormService {
       if (result && result.length > 0) {
         const processKey = result[0].process_key;
         try {
+          this.logger.log(`Submitting to work flow: ${processKey}`);
           await this.ruleEngine.start(processKey, {
             submissionId,
             ...data,
@@ -168,11 +169,16 @@ export class FormService {
     };
     submission.modifier = user;
     await this.submissionRepo.save(submission);
+    await this.runWorkflow(formName, submission.id, {});
     return submission.id;
   }
 
   async getAllSubmission(): Promise<SubmissionResponseDto[]> {
-    const results: Submission[] = await this.submissionRepo.find();
+    const results: Submission[] = await this.submissionRepo.find({
+      order: {
+        updatedAt: 'DESC',
+      },
+    });
     const returnValues: SubmissionResponseDto[] = results.map((submission) => ({
       id: submission.id,
       data: submission.data.formData,

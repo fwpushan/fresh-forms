@@ -4,6 +4,7 @@ import { WorkflowConfig } from '../../types';
 import { ConfigService } from '../config/config.service';
 import { KeycloakService } from 'src/modules/auth';
 import { LoggerService } from '../logger';
+import { exists } from 'fs';
 
 @Injectable()
 export class RuleEngineService {
@@ -11,6 +12,19 @@ export class RuleEngineService {
     private readonly configService: ConfigService,
     private readonly logger: LoggerService,
   ) {}
+
+  private createRuleEngineVariables(payload: any) {
+    const variables = Object.keys(payload).reduce((existing: any, key) => {
+      return {
+        ...existing,
+        [key]: { value: `${payload[key]}`, type: 'string' },
+      };
+    }, {});
+
+    return {
+      variables,
+    };
+  }
 
   private async token() {
     return (
@@ -32,7 +46,7 @@ export class RuleEngineService {
   async start(name: string, payload: any) {
     const startURL = this.workflowUrl(name, 'start');
     const token = await this.token();
-    return axios.post(startURL, payload, {
+    return axios.post(startURL, this.createRuleEngineVariables(payload), {
       headers: {
         Authorization: `Bearer ${token}`,
       },

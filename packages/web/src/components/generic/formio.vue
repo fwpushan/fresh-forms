@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { onMounted, ref } from "vue";
+import { onUpdated, onMounted, ref } from "vue";
 import { Formio } from "formiojs";
 import { SetupContext } from "vue";
 import ApiClient from "../../services/http/ApiClient";
@@ -32,7 +32,7 @@ export default {
     const formioContainerRef = ref(null);
     const hideSpinner = ref(false);
 
-    onMounted(async () => {
+    const loadForm = async () => {
       // Use SIMS API as a proxy to retrieve the form definition from formio.
       const formDefinition = await ApiClient.DynamicForms.getFormDefinition(
         props.formName,
@@ -87,7 +87,9 @@ export default {
       form.on("submit", (submision: any) => {
         context.emit("submitted", submision.data, form);
       });
-    });
+    };
+    onUpdated(loadForm);
+    onMounted(loadForm);
 
     return { formioContainerRef, hideSpinner };
   },
